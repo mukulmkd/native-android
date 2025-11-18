@@ -32,7 +32,7 @@ echo "This will take 10-30+ minutes on first build..."
 echo ""
 
 # Check if node_modules exists (required before building)
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# PROJECT_ROOT is already defined at the top of the script
 JS_DIR="$PROJECT_ROOT/js"
 NODE_MODULES_DIR="$JS_DIR/node_modules"
 
