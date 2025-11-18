@@ -209,9 +209,10 @@ native-android/
 
 ## Modules
 
-- **Products** - React Native module (working ✅)
-- **Cart** - React Native module (working ✅)
-- **PDP** - React Native module (working ✅)
+- **Products** - React Native module `@app/module-products@^0.1.8` (working ✅)
+- **Cart** - React Native module `@app/module-cart@^0.1.8` (working ✅)
+- **PDP** - React Native module `@app/module-pdp@^0.1.8` (working ✅)
+- **State** - Redux state management `@pkg/state@^0.1.5` (working ✅)
 - **Home, Profile, Settings** - Native Android screens
 
 ## 🔄 Daily Development Workflow
@@ -223,13 +224,20 @@ native-android/
 3. **Update dependencies** in this project:
    ```bash
    cd js
-   npm install @app/module-products@latest --legacy-peer-deps
+   npm install @app/module-products@latest @app/module-cart@latest @app/module-pdp@latest --legacy-peer-deps
    ```
 4. **Rebundle**:
    ```bash
    npm run bundle
    ```
 5. **Rebuild Android app** in Android Studio
+
+### Current Module Versions
+
+- `@app/module-products@^0.1.8` - Products listing module
+- `@app/module-cart@^0.1.8` - Shopping cart module
+- `@app/module-pdp@^0.1.8` - Product detail page module
+- `@pkg/state@^0.1.5` - Redux state management with persistence
 
 ### Adding a New React Native Module
 

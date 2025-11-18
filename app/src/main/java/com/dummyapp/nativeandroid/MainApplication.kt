@@ -14,7 +14,9 @@ class MainApplication : Application(), ReactApplication {
 
     override val reactNativeHost: ReactNativeHost = object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> {
-            // Use autolinking PackageList which includes AsyncStorage
+            // Use autolinking PackageList (ExpoModulesPackage removed from autolinking)
+            // Note: AsyncStorage is NOT included - it requires additional native dependencies
+            // For now, persistence will not work until AsyncStorage is properly linked
             val packageList = PackageList(this)
             val autolinkedPackages = ArrayList(packageList.getPackages())
             // Add our custom navigation bridge
