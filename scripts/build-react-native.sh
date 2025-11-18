@@ -36,6 +36,16 @@ echo ""
 JS_DIR="$PROJECT_ROOT/js"
 NODE_MODULES_DIR="$JS_DIR/node_modules"
 
+# Debug output (can be removed in production)
+if [ "${DEBUG_BUILD:-}" = "1" ]; then
+    echo "Debug: Path resolution:"
+    echo "  SCRIPT_DIR: $SCRIPT_DIR"
+    echo "  PROJECT_ROOT: $PROJECT_ROOT"
+    echo "  JS_DIR: $JS_DIR"
+    echo "  NODE_MODULES_DIR: $NODE_MODULES_DIR"
+    echo ""
+fi
+
 if [ ! -d "$NODE_MODULES_DIR" ]; then
     echo "❌ Error: node_modules not found!"
     echo ""
@@ -56,6 +66,15 @@ fi
 
 # Check if React Native is installed
 RN_DIR="$NODE_MODULES_DIR/react-native"
+
+# Debug output
+if [ "${DEBUG_BUILD:-}" = "1" ]; then
+    echo "Debug: React Native path:"
+    echo "  RN_DIR: $RN_DIR"
+    echo "  RN_DIR exists: $([ -d "$RN_DIR" ] && echo "YES" || echo "NO")"
+    echo ""
+fi
+
 if [ ! -d "$RN_DIR" ]; then
     echo "❌ Error: react-native not found in node_modules!"
     echo ""
