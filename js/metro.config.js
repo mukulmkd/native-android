@@ -9,6 +9,8 @@ const defaultConfig = getDefaultConfig(projectRoot);
 module.exports = mergeConfig(defaultConfig, {
   resolver: {
     nodeModulesPaths: [nodeModules],
+    // Allow optional dependencies like expo (used in modules but not required for native bundles)
+    unstable_enablePackageExports: true,
   },
   watchFolders: [nodeModules],
 });
