@@ -1,0 +1,36 @@
+# Gradle
+/.gradle
+/build
+/app/build
+*.iml
+
+# Android Studio
+/.idea
+/captures
+
+# Local configuration
+local.properties
+.npmrc
+
+# Node
+js/node_modules
+js/package-lock.json
+
+# Build artifacts
+*.log
+*.bak
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# React Native build artifacts (in node_modules)
+js/node_modules/react-native/ReactAndroid/build/
+js/node_modules/react-native/ReactAndroid/hermes-engine/build/
+js/node_modules/react-native/build/
+js/node_modules/react-native/sdks/hermes/android/build/
+
+# Patches (optional - we use script approach)
+# js/patches/
+

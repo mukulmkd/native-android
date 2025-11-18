@@ -1,0 +1,55 @@
+diff --git a/node_modules/react-native/ReactAndroid/hermes-engine/build.gradle.kts b/node_modules/react-native/ReactAndroid/hermes-engine/build.gradle.kts
+index 0000000..1111111 100644
+--- a/node_modules/react-native/ReactAndroid/hermes-engine/build.gradle.kts
++++ b/node_modules/react-native/ReactAndroid/hermes-engine/build.gradle.kts
+@@ -27,10 +27,43 @@ fun getSDKPath(): String {
+   val androidSdkRoot = System.getenv("ANDROID_SDK_ROOT")
+   val androidHome = System.getenv("ANDROID_HOME")
+   
+-  return when {
+-    !androidSdkRoot.isNullOrBlank() -> androidSdkRoot
+-    !androidHome.isNullOrBlank() -> androidHome
+-    else -> throw IllegalStateException("Neither ANDROID_SDK_ROOT nor ANDROID_HOME is set.")
++  // Try environment variables first
++  when {
++    !androidSdkRoot.isNullOrBlank() -> return androidSdkRoot
++    !androidHome.isNullOrBlank() -> return androidHome
+   }
++  
++  // Fall back to local.properties files
++  // Try React Native's local.properties first (js/node_modules/react-native/local.properties)
++  val rnLocalProperties = File(projectDir.parentFile.parentFile, "local.properties")
++  if (rnLocalProperties.exists()) {
++    rnLocalProperties.readLines().forEach { line ->
++      if (line.startsWith("sdk.dir=")) {
++        val sdkDir = line.substring(8).trim()
++        if (sdkDir.isNotBlank()) {
++          return sdkDir
++        }
++      }
++    }
++  }
++  
++  // Try root project's local.properties (native-android/local.properties)
++  // From hermes-engine: go up 5 levels to reach native-android root
++  val rootLocalProperties = File(projectDir.parentFile.parentFile.parentFile.parentFile.parentFile, "local.properties")
++  if (rootLocalProperties.exists()) {
++    rootLocalProperties.readLines().forEach { line ->
++      if (line.startsWith("sdk.dir=")) {
++        val sdkDir = line.substring(8).trim()
++        if (sdkDir.isNotBlank()) {
++          return sdkDir
++        }
++      }
++    }
++  }
++  
++  // Default location
++  val defaultSdk = "${System.getProperty("user.home")}/Library/Android/sdk"
++  if (File(defaultSdk).exists()) {
++    return defaultSdk
++  }
++  
++  throw IllegalStateException("Neither ANDROID_SDK_ROOT nor ANDROID_HOME is set, and no local.properties found.")
+ }
+ 

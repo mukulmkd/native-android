@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Native Android App</string>
+
+    <string name="title_home">Home</string>
+    <string name="subtitle_home">Explore the native Kotlin experience</string>
+    <string name="description_home">This is a placeholder screen that represents the Home area of the native application.</string>
+
+    <string name="title_profile">Profile</string>
+    <string name="subtitle_profile">View profile information and preferences</string>
+    <string name="description_profile">Customize the native profile screen. Hook in your React Native module or native UI here.</string>
+
+    <string name="title_settings">Settings</string>
+    <string name="subtitle_settings">Manage notification, privacy, and other settings</string>
+    <string name="description_settings">Update this screen with your native settings UI. It currently acts as a placeholder.</string>
+
+    <string name="title_products">Products</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_pdp">Product Detail</string>
+
+    <string name="title_products_rn">Products (RN)</string>
+    <string name="subtitle_products_rn">Open the React Native products listing</string>
+    <string name="description_products_rn">This screen will host the Verdaccio-delivered React Native products module.</string>
+
+    <string name="title_cart_rn">Cart (RN)</string>
+    <string name="subtitle_cart_rn">Review the cart experience implemented in RN</string>
+    <string name="description_cart_rn">Attach the React Native cart module here to render the shared cart UI.</string>
+
+    <string name="title_pdp_rn">PDP (RN)</string>
+    <string name="subtitle_pdp_rn">Preview the product detail page module</string>
+    <string name="description_pdp_rn">Swap this placeholder for the React Native PDP module bundled via Verdaccio.</string>
+
+    <string name="launch_error_message">Unable to open %1$s.</string>
+</resources>
+

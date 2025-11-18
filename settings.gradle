@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        google()
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "NativeAndroidApp"
+include(":app")
+
+// Include React Native Gradle plugin from node_modules
+includeBuild("js/node_modules/@react-native/gradle-plugin")
+
+// Include React Native from source to build executor library and enable Hermes
+// Gradle will automatically substitute com.facebook.react:react-android and 
+// com.facebook.react:hermes-android with the local build outputs
+includeBuild("js/node_modules/react-native")
+

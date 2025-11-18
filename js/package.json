@@ -1,0 +1,29 @@
+{
+  "name": "native-android-js",
+  "private": true,
+  "dependencies": {
+    "@app/module-cart": "^0.1.3",
+    "@app/module-pdp": "^0.1.3",
+    "@app/module-products": "^0.1.2",
+    "@pkg/state": "^0.1.1",
+    "@pkg/ui": "^0.1.2",
+    "@react-native-async-storage/async-storage": "^1.24.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5"
+  },
+  "devDependencies": {
+    "@react-native-community/cli": "^14.1.0",
+    "@react-native-community/cli-platform-android": "^14.1.0",
+    "@react-native/metro-config": "^0.81.5",
+    "patch-package": "^8.0.1"
+  },
+  "scripts": {
+    "bundle": "react-native bundle --config metro.config.js --entry-file index.js --bundle-output ../app/src/main/assets/index.android.bundle --assets-dest ../app/src/main/res --platform android --dev false",
+    "bundle:products": "npm run bundle",
+    "bundle:cart": "npm run bundle",
+    "bundle:pdp": "npm run bundle",
+    "bundle:all": "npm run bundle",
+    "postinstall": "bash ../scripts/fix-react-native-sdk-path.sh || echo 'Warning: Could not apply React Native SDK path fix. Run manually: bash scripts/fix-react-native-sdk-path.sh'"
+  }
+}
