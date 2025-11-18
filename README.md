@@ -92,6 +92,8 @@ npm install --legacy-peer-deps
 
 #### Step 5: Build React Native from Source (First Time Only)
 
+**⚠️ IMPORTANT**: Make sure you've completed Step 4 (installing JavaScript dependencies) before running this step. The build script requires `node_modules` to be present.
+
 **⚠️ This step takes 20-30+ minutes** but is required only once:
 
 ```bash
@@ -105,6 +107,11 @@ cd ..
 **Expected output**: You'll see React Native and Hermes being compiled. This is a one-time infrastructure setup and will take some time (around 20-30 minutes).
 
 **Why this is needed**: React Native 0.81.5 pre-built AARs don't include `libhermes_executor.so`, which is required for Hermes to work.
+
+**⚠️ If you see an error about `node_modules` not found:**
+- Make sure you completed Step 4: `cd js && npm install --legacy-peer-deps`
+- Verify `js/node_modules` directory exists
+- Then try running the build script again
 
 #### Step 6: Bundle React Native Modules
 

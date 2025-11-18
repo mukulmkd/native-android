@@ -23,11 +23,17 @@ fi
 echo "Applying React Native SDK path fix..."
 
 # Use Python to apply the fix (more reliable than sed for complex replacements)
-python3 << 'PYTHON_SCRIPT'
+# Pass file path as environment variable since heredoc doesn't pass arguments to sys.argv
+RN_BUILD_FILE="$RN_BUILD_FILE" python3 << 'PYTHON_SCRIPT'
 import sys
+import os
 import re
 
-file_path = sys.argv[1]
+# Get file path from environment variable instead of sys.argv
+file_path = os.environ.get('RN_BUILD_FILE')
+if not file_path:
+    print("Error: RN_BUILD_FILE environment variable not set")
+    sys.exit(1)
 
 with open(file_path, 'r') as f:
     content = f.read()
@@ -131,7 +137,6 @@ else:
     print("⚠️  getSDKPath() function not found. File may have changed.")
     sys.exit(1)
 PYTHON_SCRIPT
-"$RN_BUILD_FILE"
 
 if [ $? -eq 0 ]; then
     echo "✅ SDK path fix applied successfully"

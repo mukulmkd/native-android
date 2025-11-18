@@ -4,7 +4,8 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
 
 # Set Android SDK
 export ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
@@ -30,12 +31,65 @@ echo "Android SDK: $ANDROID_HOME"
 echo "This will take 10-30+ minutes on first build..."
 echo ""
 
+# Check if node_modules exists (required before building)
+# PROJECT_ROOT is already defined at the top of the script
+JS_DIR="$PROJECT_ROOT/js"
+NODE_MODULES_DIR="$JS_DIR/node_modules"
+
+# Debug output (can be removed in production)
+if [ "${DEBUG_BUILD:-}" = "1" ]; then
+    echo "Debug: Path resolution:"
+    echo "  SCRIPT_DIR: $SCRIPT_DIR"
+    echo "  PROJECT_ROOT: $PROJECT_ROOT"
+    echo "  JS_DIR: $JS_DIR"
+    echo "  NODE_MODULES_DIR: $NODE_MODULES_DIR"
+    echo ""
+fi
+
+if [ ! -d "$NODE_MODULES_DIR" ]; then
+    echo "❌ Error: node_modules not found!"
+    echo ""
+    echo "You must install JavaScript dependencies first:"
+    echo ""
+    echo "  1. Navigate to js directory:"
+    echo "     cd $JS_DIR"
+    echo ""
+    echo "  2. Install dependencies:"
+    echo "     npm install --legacy-peer-deps"
+    echo ""
+    echo "  3. Then return here and run this script again:"
+    echo "     cd $PROJECT_ROOT"
+    echo "     ./scripts/build-react-native.sh"
+    echo ""
+    exit 1
+fi
+
+# Check if React Native is installed
+RN_DIR="$NODE_MODULES_DIR/react-native"
+
+# Debug output
+if [ "${DEBUG_BUILD:-}" = "1" ]; then
+    echo "Debug: React Native path:"
+    echo "  RN_DIR: $RN_DIR"
+    echo "  RN_DIR exists: $([ -d "$RN_DIR" ] && echo "YES" || echo "NO")"
+    echo ""
+fi
+
+if [ ! -d "$RN_DIR" ]; then
+    echo "❌ Error: react-native not found in node_modules!"
+    echo ""
+    echo "Please ensure you've installed dependencies:"
+    echo "  cd $JS_DIR"
+    echo "  npm install --legacy-peer-deps"
+    echo ""
+    exit 1
+fi
+
 # Copy gradlew to React Native directory if it doesn't exist
-RN_DIR="$SCRIPT_DIR/js/node_modules/react-native"
 if [ ! -f "$RN_DIR/gradlew" ]; then
     echo "Setting up React Native build environment..."
-    cp "$SCRIPT_DIR/gradlew" "$RN_DIR/"
-    cp -r "$SCRIPT_DIR/gradle" "$RN_DIR/" 2>/dev/null || true
+    cp "$PROJECT_ROOT/gradlew" "$RN_DIR/"
+    cp -r "$PROJECT_ROOT/gradle" "$RN_DIR/" 2>/dev/null || true
     chmod +x "$RN_DIR/gradlew"
 fi
 
@@ -57,7 +111,7 @@ echo ""
 ./gradlew :packages:react-native:ReactAndroid:publishToMavenLocal \
           :packages:react-native:ReactAndroid:hermes-engine:publishToMavenLocal
 
-cd "$SCRIPT_DIR"
+cd "$PROJECT_ROOT"
 
 echo ""
 echo "========================================="
