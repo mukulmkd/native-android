@@ -67,13 +67,15 @@ tasks.named('generateAutolinkingPackageList').configure {
     dependsOn('generateAutolinkingConfig')
     doLast {
         // Remove AsyncStorage and ExpoModulesPackage from generated PackageList
-        // AsyncStorage has linking issues, ExpoModulesPackage is not needed (expo is only in devDependencies for Metro bundling)
+        // AsyncStorage has compilation issues with Kotlin dependencies (Room, etc.)
+        // ExpoModulesPackage is not needed (expo is only in devDependencies for Metro bundling)
+        // TODO: Properly link AsyncStorage to enable persistence
         def packageListFile = file("${project.buildDir}/generated/autolinking/src/main/java/com/facebook/react/PackageList.java")
         if (packageListFile.exists()) {
             def content = packageListFile.text
             // Remove AsyncStorage import
-            content = content.replaceAll('import com\\.reactnativecommunity\\.asyncstorage\\.AsyncStoragePackage;', '// AsyncStorage removed due to linking issues')
-            // Remove AsyncStoragePackage() from the list - match with newline
+            content = content.replaceAll('import com\\.reactnativecommunity\\.asyncstorage\\.AsyncStoragePackage;', '// AsyncStorage removed - has compilation issues with Kotlin dependencies')
+            // Remove AsyncStoragePackage() from the list
             content = content.replaceAll(',\\s*new AsyncStoragePackage\\(\\)', '')
             // Remove ExpoModulesPackage import
             content = content.replaceAll('import expo\\.modules\\.ExpoModulesPackage;', '// ExpoModulesPackage removed - expo is only in devDependencies for Metro bundling')
@@ -93,5 +95,8 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "com.facebook.react:react-android:0.81.5"
     implementation "com.facebook.react:hermes-android:0.81.5"
+    // Add AsyncStorage dependencies that are needed at runtime
+    // Note: AsyncStorage native module is manually registered in MainApplication.kt
+    // The JavaScript side will work, but native module needs to be available
 }
 

@@ -9,6 +9,7 @@ import com.facebook.react.ReactApplication
 import com.facebook.react.ReactInstanceManager
 import com.facebook.react.ReactRootView
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
+import com.facebook.react.modules.core.DeviceEventManagerModule
 
 class ProductsActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     private var reactRootView: ReactRootView? = null
@@ -39,6 +40,29 @@ class ProductsActivity : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     override fun onResume() {
         super.onResume()
         reactInstanceManager?.onHostResume(this, this)
+        // Reload persisted state when view appears to ensure cart count is up-to-date
+        // This is especially important when navigating back from Cart after clearing items
+        reloadPersistedState()
+    }
+
+    private fun reloadPersistedState() {
+        val instanceManager = reactInstanceManager ?: return
+        val reactContext = instanceManager.currentReactContext
+        
+        // React context might not be ready immediately, so post to handler
+        if (reactContext != null) {
+            // Use DeviceEventEmitter to send event to React Native
+            reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("ReloadPersistedState", null)
+        } else {
+            // If context not ready, try again after a short delay
+            reactRootView?.postDelayed({
+                val context = reactInstanceManager?.currentReactContext
+                context?.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    ?.emit("ReloadPersistedState", null)
+            }, 100)
+        }
     }
 
     override fun onPause() {
